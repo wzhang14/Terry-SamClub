@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %} | Welcome {% endblock %}
+
+{% block content %}
+<!-- Showcase -->
+<section id="showcase">
+  <div class="container text-center">
+    <div class="home-search p-5">
+      <div class="overlay p-5">
+        <h1 class="display-4 mb-4" style="color:#ffaf00">
+          Check Out What We Create Today!
+        </h1>
+        <p class="lead">Welcome to Terry & Sam's club. We like creating all kinds of stuff. Lego, handcrafts, picture,
+          models... you name it. Check our creations and enjoy it!</p>
+        <div class="search">
+          <form action="{% url 'search' %}">
+            <!-- Form Row 1 -->
+            <div class="form-row">
+              <div class="col-md-12 mb-3">
+                <label class="sr-only">Keywords</label>
+                <input type="text" name="keywords" class="form-control" placeholder="Keyword (Lego, robot, etc)">
+              </div>
+            </div>
+            <!-- Form Row 2 -->
+            <div class="form-row">
+              <div class="col-md-6 mb-3">
+                <label class="sr-only">Category</label>
+                <select name="category" class="form-control">
+                  <option selected="true" disabled="disabled">Category (All)</option>
+                  {% for key,value in category_choices.items %}
+                  <option value="{{key}}">{{value}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="sr-only">Creator</label>
+                <select name="creator" class="form-control">
+                  <option selected="true" disabled="disabled">Creator (All)</option>
+                  {% for key,value in creator_choices.items %}
+                  <option value="{{key}}">{{value}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-block mt-4" type="submit">Search Our Creations</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Creations -->
+<section id="creations" class="py-5">
+
+  <div class="container">
+    <h3 class="text-center mb-3">Latest Creations</h3>
+    <div class="row">
+      {% if creations %}
+      {% for creation in creations %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card listing-preview">
+          <img class="card-img-top" src="{{creation.photo_main.url}}" alt="">
+          <div class="card-img-overlay">
+            <h2>
+              <span class="badge badge-secondary text-white">{{creation.category}}</span>
+            </h2>
+          </div>
+          <div class="card-body">
+            <div class="listing-heading text-center" style="color:#01395e">
+              <h4 class="text-primary">{{creation.title}}</h4>
+            </div>
+            <hr>
+            <div class="row py-2 text-secondary" style="height: 130px; overflow: hidden;">
+              <p>{{creation.description}}</p>
+            </div>
+            <hr>
+            <div class="row py-2 text-secondary">
+              <div class="col-12" style="color:#ffaf00">
+                <i class="fas fa-user"></i>{{creation.creator}}</div>
+            </div>
+            <div class="row text-secondary pb-2">
+              <div class="col-12">
+                <i class="fas fa-clock"></i>{{creation.create_date | timesince}}</div>
+            </div>
+            <hr>
+            <a href="{% url 'creation' creation.id %}" class="btn btn-primary btn-block">More Info</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="col-md-12">
+        <p>No creations Available</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section id="services" class="py-5 bg-secondary text-white">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <i class="fas fa-comment fa-4x mr-4"></i>
+        <hr>
+        <h3 style="color:#ffaf00">Having a chat</h3>
+        <p>We would like to hear from you about what you think about our creations. Leave us a message and have a nice
+          chat.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="far fa-lightbulb fa-4x mr-4" style="color:#ffaf00"></i>
+        <hr>
+        <h3>Ideas Sharing</h3>
+        <p style="color:#ffaf00">If you have any good ideas about creation, come and share your ideas. We love to hear
+          from you!</p>
+      </div>
+      <div class="col-md-4">
+        <i class="fas fa-suitcase fa-4x mr-4"></i>
+        <hr>
+        <h3 style="color:#ffaf00">Borrowing</h3>
+        <p>Love our creations? No problems! You can borrow one for as long as 3 weeks! Just make a query to let us know.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

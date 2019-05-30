@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %} | Search Results {% endblock %}
+
+{% block content %}
+<section id="showcase-inner" class="showcase-search text-white py-5">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-12">
+        <form action="{% url 'search' %}">
+          <!-- Form Row 1 -->
+          <div class="form-row">
+            <div class="col-md-12 mb-3">
+              <label class="sr-only">Keywords</label>
+              <input type="text" name="keywords" class="form-control" placeholder="Keyword (Lego, robot, etc)"
+                value="{{values.keywords}}">
+            </div>
+          </div>
+          <!-- Form Row 2 -->
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <label class="sr-only">Category</label>
+              <select name="category" class="form-control">
+                <option selected="true" disabled="disabled">Category (All)</option>
+                {% for key,value in category_choices.items %}
+                <option value="{{key}}" {% if key == values.category %} selected {% endif %}>{{value}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="sr-only">Creator</label>
+              <select name="creator" class="form-control">
+                <option selected="true" disabled="disabled">Creator (All)</option>
+                {% for key,value in creator_choices.items %}
+                <option value="{{key}}" {% if key == values.creator %} selected {% endif %}>{{value}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block mt-4" type="submit">Search Our Creations</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'index' %}">
+            <i class="fas fa-home"></i> Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'creations' %}">Browse Creations</a>
+        </li>
+        <li class="breadcrumb-item active"> Search Results</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<!-- Creations -->
+<section id="creations" class="py-4">
+  <div class="container">
+    <div class="row">
+      {% if creations %}
+      {% for creation in creations %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card listing-preview">
+          <img class="card-img-top" src="{{creation.photo_main.url}}" alt="">
+          <div class="card-img-overlay">
+            <h2>
+              <span class="badge badge-secondary text-white">{{creation.category}}</span>
+            </h2>
+          </div>
+          <div class="card-body">
+            <div class="creation-heading text-center">
+              <h4 class="text-primary">{{creation.title}}</h4>
+            </div>
+            <hr>
+            <div class="row py-2 text-secondary" style="height: 130px; overflow: hidden;">
+              <p>{{creation.description}}</p>
+            </div>
+            <hr>
+            <div class="row py-2 text-secondary">
+              <div class="col-12">
+                <i class="fas fa-user"></i>{{creation.creator}}</div>
+            </div>
+            <div class="row text-secondary pb-2">
+              <div class="col-12">
+                <i class="fas fa-clock"></i>{{creation.create_date | timesince }}</div>
+            </div>
+            <hr>
+            <a href="{% url 'creation' creation.id %}" class="btn btn-primary btn-block">More Info</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="col-md-12">
+        <p>No creations Available</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
